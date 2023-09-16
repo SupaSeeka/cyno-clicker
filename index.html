@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<style>
+    #hidden {
+        visibility: hidden;
+    }
+
+    body {
+        background-color: lightpink;
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .upgradeButton {
+        text-align: left;
+    }
+
+    .blah {
+        object-position: bottom;
+        text-align: left;
+    }
+
+</style>
+
+<body onload="runFunc()"></body>
+
+
+<h1>You have <span id="myText"></span> Mora!</h1>
+<h2>You are currently making <span id="myUpgradeText"></span> Mora per click</h2>
+
+<button class="upgradeButton" onclick="upgrade1()">Upgrade! Costs <span id="upgradeCost"></span></button>
+<br>
+<img class="pic" onclick="doThing()" src="assets/CynoNoBack.png">
+<br>
+<audio id="audio" src="assets/Music.mp3"></audio>
+<h1> <span id="upgradeText"></span></h1>
+
+<br>
+
+<img class="playAudioClass" onclick="playAudio()" src="assets/audioSymbol.png" width="80" height="60">
+
+<script>
+    let x = 0
+    let i = 1
+    let cost = 10
+    let audioOn = false
+
+    function playAudio() {
+        var audio = document.getElementById("audio");
+        audio.play();
+    }
+
+    function runFunc() {
+        document.querySelector('#myText').textContent = 0
+        document.querySelector('#myUpgradeText').textContent = 1
+        document.querySelector("#upgradeCost").textContent = 10
+    }
+
+    function upgrade1() {
+        if (x >= cost) {
+            i ++
+            x = x - cost
+            cost = Math.round(cost * 2.2)
+
+            document.querySelector('#myText').textContent = x
+            document.querySelector('#myUpgradeText').textContent = i
+            document.querySelector("#upgradeCost").textContent = cost
+        }
+        else {
+            document.querySelector('#upgradeText').textContent = "Purchase failed! Make sure you have sufficient funds"
+
+            sleep(1000).then(() => {document.querySelector('#upgradeText').textContent = " ";})
+            
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+}
+        
+    }
+
+    function doThing() {
+        x = x + i
+        document.querySelector('#myText').textContent = x
+    }
+</script>
