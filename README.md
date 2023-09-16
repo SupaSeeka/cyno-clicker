@@ -8,7 +8,7 @@ Here I will do version reports and keep track of my progress through time.
 
 Happy gaming!
 
-## v.0.0.1
+## v0.0.1
 First version report (16/09/23):
 - Added clicker function
 - Added upgrade function
