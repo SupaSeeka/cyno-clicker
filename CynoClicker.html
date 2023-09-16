@@ -22,7 +22,7 @@
 
 </style>
 
-<body onload="runFunc()"></body>
+<body onload="runFunc()"> </body>
 
 
 <h1>You have <span id="myText"></span> Mora!</h1>
@@ -39,11 +39,49 @@
 
 <img class="playAudioClass" onclick="playAudio()" src="assets/audioSymbol.png" width="80" height="60">
 
+<button id="saveArray1" onclick="createSaveKey()"><span>Export</span></button>
+<button id="importArray" onclick="importSaveKey()"><span>Import</span></button>
+
+<input type="text" id="saveKey" placeholder="Type save key here..." name="saveKeyInput">
+<br>
+
 <script>
     let x = 0
     let i = 1
     let cost = 10
-    let audioOn = false
+    //let audioOn = false
+
+    function updateValues() {
+        document.querySelector('#myText').textContent = x
+        document.querySelector('#myUpgradeText').textContent = i
+        document.querySelector("#upgradeCost").textContent = cost
+    }
+
+    function createSaveKey() {
+        let saveArray = []
+        saveArray[0] = x.toString(16)
+        saveArray[1] = i.toString(16)
+        saveArray[2] = cost.toString(16)
+
+
+        navigator.clipboard.writeText(saveArray)
+        alert("Copied the text: " + saveArray)
+    }
+
+    function importSaveKey() {
+        saveArray = document.getElementById("saveKey").value
+        console.log(saveArray)
+        saveArray = saveArray.split(',')
+
+        x = parseInt(saveArray[0], 16)
+        i = parseInt(saveArray[1], 16)
+        cost = parseInt(saveArray[2], 16)
+
+        updateValues()
+
+
+    }
+
 
     function playAudio() {
         var audio = document.getElementById("audio");
@@ -62,9 +100,7 @@
             x = x - cost
             cost = Math.round(cost * 2.2)
 
-            document.querySelector('#myText').textContent = x
-            document.querySelector('#myUpgradeText').textContent = i
-            document.querySelector("#upgradeCost").textContent = cost
+            updateValues()
         }
         else {
             document.querySelector('#upgradeText').textContent = "Purchase failed! Make sure you have sufficient funds"
