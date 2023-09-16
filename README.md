@@ -14,3 +14,4 @@ First version report (16/09/23):
 - Added upgrade function
 - Added toggleable music
 - Added a counter to keep track of money
+- Added a save game function so you can save your beloved progress!
