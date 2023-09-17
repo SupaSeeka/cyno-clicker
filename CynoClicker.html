@@ -51,12 +51,13 @@
     let cost = 10
     //let audioOn = false
 
+    //The function used to update all values displayed in text (for example, x, i and cost)
     function updateValues() {
         document.querySelector('#myText').textContent = x
         document.querySelector('#myUpgradeText').textContent = i
         document.querySelector("#upgradeCost").textContent = cost
     }
-
+    //When the 'Export' button is pressed, this is activated and takes all values needed and puts them into hexedecimal and in an array
     function createSaveKey() {
         let saveArray = []
         saveArray[0] = x.toString(16)
@@ -68,32 +69,36 @@
         alert("Copied the text: " + saveArray)
     }
 
+    // Takes the array exported from the function 'createSaveKey' and interprets the data back into the game to import the save data
     function importSaveKey() {
         saveArray = document.getElementById("saveKey").value
         console.log(saveArray)
         saveArray = saveArray.split(',')
 
-        x = parseInt(saveArray[0], 16)
-        i = parseInt(saveArray[1], 16)
-        cost = parseInt(saveArray[2], 16)
-
+        if( saveArray[0] > 0 ||  saveArray[1] >= 1 ||  saveArray[2] >= 10) {
+            x = parseInt(saveArray[0], 16)
+            i = parseInt(saveArray[1], 16)
+            cost = parseInt(saveArray[2], 16)
+        }
         updateValues()
 
 
     }
 
-
+    //Plays the audio from a certain element
     function playAudio() {
         var audio = document.getElementById("audio");
         audio.play();
     }
 
+    //Runs upon the starting of the webpage to ensure values are shown instead of blank space whilst the variables are null
     function runFunc() {
         document.querySelector('#myText').textContent = 0
         document.querySelector('#myUpgradeText').textContent = 1
         document.querySelector("#upgradeCost").textContent = 10
     }
 
+    // Function called when the first upgrade button is pressed
     function upgrade1() {
         if (x >= cost) {
             i ++
@@ -114,7 +119,7 @@
 }
         
     }
-
+    //Funciton activated when Cyno icon is clicked
     function doThing() {
         x = x + i
         document.querySelector('#myText').textContent = x
