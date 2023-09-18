@@ -28,6 +28,13 @@
         animation: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s 1 normal both running scale-down-center;
     }
 
+    #moving {
+        position: fixed;
+        top: 0;
+        left: 0;
+
+    }
+
 </style>
 
 <body onload="runFunc()"> </body>
@@ -49,42 +56,39 @@
 <input type="text" id="saveKey" placeholder="Type save key here..." name="saveKeyInput">
 <br>
 
+<img id="moving" class="popupImg" onclick="makeAppear()" src="assets/AlhaithamAsCat.png" width="80" height="80">
+
 <script>
     let x = 0
     let i = 1
     let cost = 10
     let audioOn = false
-    //let audioOn = false
+    let topOffset = 0
+    let sideOffset = 0
 
-    function clickAnimation() {
-        console.log("shrunk")
-        img = document.getElementById("clickButton");
 
-        shrinkImg(img)
-        sleep(100)
-        resetImg(img)
+    let moving = document.querySelector('#moving')
 
-        function shrinkImg(Image1) {
-            // Set image size to 0.8 times original
-            Image1.style.transform = "scale(0.8)";
-            // Animation effect
-            Image1.style.transition = "transform 0.25s ease";
-            console.log("shrunk")
-        }
 
-        function resetImg(Image1) {
-            // Set image size to original
-            Image1.style.transform = "scale(1)";
-            Image1.style.transition = "transform 0.25s ease";
-            console.log("Back to normal")
-        }
-
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms))
-        }
-    }
+    makeAppear(100)
 
     //The function used to update all values displayed in text (for example, x, i and cost)
+    function makeAppear() {
+        topOffset = getRandomInt(0, window.innerHeight)
+        sideOffset = getRandomInt(0 , window.innerWidth )
+        moving.style.top = `${topOffset}px`
+        moving.style.left = `${sideOffset}px`
+
+        //window.innerWidth
+        //window.innerHeight
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1) + min)
+        }   
+
+    }
     function updateValues() {
         document.querySelector('#myText').textContent = x
         document.querySelector('#myUpgradeText').textContent = i
@@ -167,33 +171,5 @@
     function doThing() {
         x = x + i
         document.querySelector('#myText').textContent = x
-
-        console.log("shrunk")
-        img = document.getElementById("clickButton");
-
-        shrinkImg(img)
-        sleep(100)
-        resetImg(img)
-
-        function shrinkImg(Image1) {
-            // Set image size to 0.8 times original
-            Image1.style.transform = "scale(0.8)";
-            // Animation effect
-            Image1.style.transition = "transform 0.25s ease";
-            console.log("shrunk")
-        }
-
-        function resetImg(Image1) {
-            // Set image size to original
-            Image1.style.transform = "scale(1)";
-            Image1.style.transition = "transform 0.25s ease";
-            console.log("Back to normal")
-        }
-
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms))
-        }
-
-
     }
 </Script> 
