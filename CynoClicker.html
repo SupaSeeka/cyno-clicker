@@ -11,9 +11,10 @@
         text-align: center;
     }
 
-    .pic {
+    * {
          touch-action: none; 
     }
+
     .upgradeButton {
         text-align: left;
     }
@@ -21,6 +22,10 @@
     .blah {
         object-position: bottom;
         text-align: left;
+    }
+
+    .animated {
+        animation: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s 1 normal both running scale-down-center;
     }
 
 </style>
@@ -33,18 +38,14 @@
 
 <button class="upgradeButton" onclick="upgrade1()">Upgrade! Costs <span id="upgradeCost"></span></button>
 <br>
-<img class="pic" onclick="doThing()" src="assets/CynoNoBack.png">
+<img class="pic" id="clickButton" id="animated" onclick="doThing()" onclick="clickAnimation()" src="assets/CynoNoBack.png">
 <br>
 <audio id="audio" src="assets/Music.mp3"></audio>
 <h1> <span id="upgradeText"></span></h1>
-
 <br>
-
 <img class="playAudioClass" onclick="playAudio()" src="assets/audioSymbol.png" width="80" height="60">
-
 <button id="saveArray1" onclick="createSaveKey()"><span>Export</span></button>
 <button id="importArray" onclick="importSaveKey()"><span>Import</span></button>
-
 <input type="text" id="saveKey" placeholder="Type save key here..." name="saveKeyInput">
 <br>
 
@@ -52,7 +53,36 @@
     let x = 0
     let i = 1
     let cost = 10
+    let audioOn = false
     //let audioOn = false
+
+    function clickAnimation() {
+        console.log("shrunk")
+        img = document.getElementById("clickButton");
+
+        shrinkImg(img)
+        sleep(100)
+        resetImg(img)
+
+        function shrinkImg(Image1) {
+            // Set image size to 0.8 times original
+            Image1.style.transform = "scale(0.8)";
+            // Animation effect
+            Image1.style.transition = "transform 0.25s ease";
+            console.log("shrunk")
+        }
+
+        function resetImg(Image1) {
+            // Set image size to original
+            Image1.style.transform = "scale(1)";
+            Image1.style.transition = "transform 0.25s ease";
+            console.log("Back to normal")
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+        }
+    }
 
     //The function used to update all values displayed in text (for example, x, i and cost)
     function updateValues() {
@@ -90,8 +120,19 @@
 
     //Plays the audio from a certain element
     function playAudio() {
-        var audio = document.getElementById("audio");
-        audio.play();
+        var audio = document.getElementById("audio")
+        
+        if (audioOn === false) {
+            audio.play()
+            audioOn = true
+        }
+        else {
+            audio.pause()
+            audioOn = false
+        }
+        console.log(audioOn)
+
+
     }
 
     //Runs upon the starting of the webpage to ensure values are shown instead of blank space whilst the variables are null
@@ -126,5 +167,33 @@
     function doThing() {
         x = x + i
         document.querySelector('#myText').textContent = x
+
+        console.log("shrunk")
+        img = document.getElementById("clickButton");
+
+        shrinkImg(img)
+        sleep(100)
+        resetImg(img)
+
+        function shrinkImg(Image1) {
+            // Set image size to 0.8 times original
+            Image1.style.transform = "scale(0.8)";
+            // Animation effect
+            Image1.style.transition = "transform 0.25s ease";
+            console.log("shrunk")
+        }
+
+        function resetImg(Image1) {
+            // Set image size to original
+            Image1.style.transform = "scale(1)";
+            Image1.style.transition = "transform 0.25s ease";
+            console.log("Back to normal")
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+        }
+
+
     }
-</script>
+</Script> 
