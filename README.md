@@ -12,6 +12,11 @@ Happy gaming!
 First version report (16/09/23):
 - Added clicker function
 - Added upgrade function
-- Added toggleable music
+- Added music
 - Added a counter to keep track of money
 - Added a save game function so you can save your beloved progress!
+
+## v0.0.2 (18/09/23)
+- Made the music toggleable
+- Added a random generator for Alhaitham icon for the coming boosters
+
