@@ -15,10 +15,6 @@
          touch-action: none; 
     }
 
-    .upgradeButton {
-        text-align: left;
-    }
-
     .blah {
         object-position: bottom;
         text-align: left;
@@ -29,6 +25,7 @@
     }
 
     #moving {
+        /* visibility: hidden; */
         position: fixed;
         top: 0;
         left: 0;
@@ -38,7 +35,7 @@
         position: fixed;
         top:70px;
         left: 15px;
-        visibility: visible;
+        visibility: hidden;
     }
     #statusEffectBar {
         position: fixed;
@@ -96,7 +93,7 @@
     }   
 
     .upgrade-button {
-        background-color: rgb(74, 74, 138); 
+        background-color: rgb(176, 68, 68); 
         color: white; 
         padding: 10px 20px; 
         border: none; 
@@ -112,8 +109,12 @@
         left: 10px;
     }
 
+    #canAfford {
+        background-color: rgb(176, 68, 68);
+    }
+
     .upgrade-button2 {
-        background-color: rgb(74, 74, 138); 
+        background-color: rgb(176, 68, 68); 
         color: white; 
         padding: 10px 20px; 
         border: none; 
@@ -128,6 +129,11 @@
         top: 350px;
         left: 10px;
     }
+
+    .upgrade-button2:hover {
+        background-color: #2980b9; /* New background color on hover */
+    }
+
 /* Hover effect - change background color on hover */
     .upgrade-button:hover {
         background-color: #2980b9; /* New background color on hover */
@@ -141,6 +147,7 @@
 
 <!--add colour selector-->
 <!--Async functions!!!!-->
+<br>
 
 <h1>You have <span id="myText"></span> Mora!</h1>
 <h2><span id="myUpgradeText"></span> Mora per click</h2>
@@ -148,12 +155,12 @@
 
 <div class="tooltip2">
     <span class="tooltiptext">Cost: <span id="upgradeCost"></span><br>+1 Mora per click</span>
-    <button class="upgrade-button" onclick="upgrade1()">Click upgrade</button>
+    <button class="upgrade-button" id="canAfford" onclick="upgrade1()">Click upgrade</button>
 </div>
 
 <div class="tooltip3">
-    <span class="tooltiptext">Cost: <span id="cost1"></span> <br> Levels Cyno once <br> Max level: 90</span>
-    <button class="upgrade-button2" onclick="upgrade2()">Level up!</button>
+    <span class="tooltiptext">Cost: <span id="cost1"></span> <br> Levels Cyno once <br> Max level: 90 <br> Current level: <span id="cynoLevel"></span>/90</span>
+    <button class="upgrade-button2" onclick="upgrade2()" id="canAfford1">Level up!</button>
 </div>
 
 <br>
@@ -168,15 +175,16 @@
 <input type="text" id="saveKey" placeholder="Type save key here..." name="saveKeyInput">
 <br>
 
-<img id="moving" class="popupImg" onclick="makeAppear()" src="assets/AlhaithamAsCat.png" width="80" height="80">
+<img id="moving" class="popupImg" onclick="boosterApply()" src="assets/AlhaithamAsCat.png" width="80" height="80">
 
 <h3 id="statusEffectBar"> Current status effects: </h3>
 
-<img id="statusEffect" class ="tooltiptext" src="assets/AlhaithamAsCat.png" width="100" height="100">
+<!-- <img id="statusEffect" class ="tooltiptext" src="assets/AlhaithamAsCat.png" width="100" height="100"> -->
+
 
 <div class="tooltip">
   <span class="tooltiptext">2x click bonus</span>
-  <img id="statusEffect" class ="tooltip" src="assets/AlhaithamAsCat.png" width="100" height="100">
+  <img class ="tooltip" id="statusEffect" src="assets/AlhaithamAsCat.png" width="100" height="100">
 </div>
 
 <script>
@@ -189,36 +197,68 @@
     let sideOffset = 0
     let cost1 = 50
     let level = 1
-
+    let cynoLevel = 1
     let moving = document.querySelector('#moving')
 
-
-    makeAppear(100)
-
-
-
-    //The function used to update all values displayed in text (for example, x, i and cost)
 
     function updateValue() {
         x = x + idleValue
         // Update the display to show the new resource value
         document.getElementById("myText").textContent = x;
+
+        updateValues()
     }
 
     setInterval(updateValue, 1000); // Call the function 
 
+    // setInterval(makeAppear, 1000)
+
+    setInterval(makeAppear, 300000)
+
+    function boosterApply() {
+        makeDisappear()
+        let tempVar = document.querySelector('#statusEffect')
+
+        tempVar.style.visibility = `visible`
+
+        i = i *2
+        updateValues()
+
+        setTimeout(boosterRemove, 30000)
+
+        function boosterRemove() {
+            i = i / 2
+            updateValues()
+            tempVar.style.visibility = `hidden`
+        }
+    }
+
     function makeAppear() {
+        moving.style.visibility = `visible`
         topOffset = getRandomInt(40, window.innerHeight -40)
         sideOffset = getRandomInt(40 , window.innerWidth -40)
         moving.style.top = `${topOffset}px`
         moving.style.left = `${sideOffset}px`
 
+        
+
+        setTimeout(makeDisappear, 10000)
+    
+
         function getRandomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
             return Math.floor(Math.random() * (max - min + 1) + min)
-        }   
+        }  
 
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+        }
+    }
+
+    function makeDisappear() {
+        moving.style.visibility = `hidden`
+        
     }
     function updateValues() {
         document.querySelector('#myText').textContent = x
@@ -226,9 +266,15 @@
         document.querySelector("#upgradeCost").textContent = cost
         document.querySelector('#myIdleText').textContent = idleValue
         document.querySelector('#cost1').textContent = cost1
+        document.querySelector('#cynoLevel').textContent = cynoLevel
+        changeButtonColour()
 
 
-        console.log("Values updated")
+        changeButtonColour()
+
+        
+
+
     }
     //When the 'Export' button is pressed, this is activated and takes all values needed and puts them into hexedecimal and in an array
     function createSaveKey() {
@@ -245,7 +291,6 @@
     // Takes the array exported from the function 'createSaveKey' and interprets the data back into the game to import the save data
     function importSaveKey() {
         saveArray = document.getElementById("saveKey").value
-        console.log(saveArray)
         saveArray = saveArray.split(',')
 
         if( saveArray[0] > 0 ||  saveArray[1] >= 1 ||  saveArray[2] >= 10) {
@@ -271,7 +316,6 @@
             audio.pause()
             audioOn = false
         }
-        console.log(audioOn)
 
 
     }
@@ -286,7 +330,6 @@
 
     // Function called when the first upgrade button is pressed
     function upgrade1() {
-        console.log(cost)
 
         if (x >= cost) {
             i ++
@@ -308,32 +351,59 @@
     }
 
     function upgrade2() {
-        console.log("heyy")
-        if (x >= cost1) { 
+        if (x >= cost1 && cynoLevel <=90) { 
 
             x = x - cost1 
+
             if (level % 10 === 0) {
                 cost1 = cost1 * 4
                 idleValue = idleValue + 5
-                console.log("on 10")
+                cynoLevel = cynoLevel + 1
+                updateValues()
             }
             else {
                 cost1 = cost1 * 2
                 idleValue = idleValue + 1
-                console.log(idleValue)
+                cynoLevel = cynoLevel + 1
+                updateValues()
             }
              
         }
 
         updateValues()
+        changeButtonColour()
     }
 
     //Funciton activated when Cyno icon is clicked
     function doThing() {
         x = x + i
-        document.querySelector('#myText').textContent = x
+        updateValues()
     }
 
+    function changeButtonColour() {
+
+        var element1 = document.getElementById("canAfford")
+        var element2 = document.getElementById("canAfford1")
+
+        if (cost <= x) {
+            element1.style.backgroundColor = "green"
+        }
+
+        else{
+            element1.style.backgroundColor = "rgb(176, 68, 68)"
+        }
+
+        if (cost1 <= x) {
+            element2.style.backgroundColor = "green"
+        }
+        else {
+            element2.style.backgroundColor = "rgb(176, 68, 68)"
+        }
+    }
+
+    function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+    }
     //make buttons red when you can't afford them, and green when you can.
    // 15,a,2ef7 (friends save code)
 </Script> 
