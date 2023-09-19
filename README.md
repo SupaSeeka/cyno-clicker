@@ -26,3 +26,6 @@ Happy gaming!
 - Made tooltips appear once you hover over the status effect icon
 - Changed the button UI and moved the button to the left of the page
 - Added an idler feature so that money ticks up per second by a variable
+- Fixed bug where you could go into negative Mora and buy infinate of level up Cyno upgrade
+- Added a second upgrade with max level 90, where each level increases by +1 except for every multiple of 10 where it increases by +5 Mora/s
+- Made the status effects actually function
