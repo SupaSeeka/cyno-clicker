@@ -32,18 +32,130 @@
         position: fixed;
         top: 0;
         left: 0;
-
     }
+
+    #statusEffect {
+        position: fixed;
+        top:70px;
+        left: 15px;
+        visibility: visible;
+    }
+    #statusEffectBar {
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        padding: 5px 0;
+        border-radius: 6px;
+ 
+        position: absolute;
+        top: 90px;
+        left: 120px
+    }
+
+    .tooltip2 .tooltiptext {
+        visibility: hidden;
+        width: 140px;
+        background-color: black;
+        color: #fff;
+        padding: 5px 0;
+        border-radius: 6px;
+        position: absolute;
+        top: 300px;
+        left: 200px;
+        
+    }
+
+    .tooltip3 .tooltiptext {
+        visibility: hidden;
+        width: 250px;
+        background-color: black;
+        color: #fff;
+        padding: 5px 0;
+        border-radius: 6px;
+        position: absolute;
+        top: 350px;
+        left: 200px;
+    }
+
+    .tooltip3:hover .tooltiptext {
+        visibility: visible;
+    }       
+
+    .tooltip2:hover .tooltiptext {
+        visibility: visible;
+    }       
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }   
+
+    .upgrade-button {
+        background-color: rgb(74, 74, 138); 
+        color: white; 
+        padding: 10px 20px; 
+        border: none; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        font-size: 16px; 
+        font-weight: bold; 
+        text-transform: uppercase; 
+        transition: background-color 0.3s ease; 
+
+        position: absolute;
+        top: 300px;
+        left: 10px;
+    }
+
+    .upgrade-button2 {
+        background-color: rgb(74, 74, 138); 
+        color: white; 
+        padding: 10px 20px; 
+        border: none; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        font-size: 16px; 
+        font-weight: bold; 
+        text-transform: uppercase; 
+        transition: background-color 0.3s ease; 
+
+        position: absolute;
+        top: 350px;
+        left: 10px;
+    }
+/* Hover effect - change background color on hover */
+    .upgrade-button:hover {
+        background-color: #2980b9; /* New background color on hover */
+    }
+
 
 </style>
 
 <body onload="runFunc()"> </body>
 
 
-<h1>You have <span id="myText"></span> Mora!</h1>
-<h2>You are currently making <span id="myUpgradeText"></span> Mora per click</h2>
+<!--add colour selector-->
+<!--Async functions!!!!-->
 
-<button class="upgradeButton" onclick="upgrade1()">Upgrade! Costs <span id="upgradeCost"></span></button>
+<h1>You have <span id="myText"></span> Mora!</h1>
+<h2><span id="myUpgradeText"></span> Mora per click</h2>
+<h3><span id="myIdleText"></span>/s</h3>
+
+<div class="tooltip2">
+    <span class="tooltiptext">Cost: <span id="upgradeCost"></span><br>+1 Mora per click</span>
+    <button class="upgrade-button" onclick="upgrade1()">Click upgrade</button>
+</div>
+
+<div class="tooltip3">
+    <span class="tooltiptext">Cost: <span id="cost1"></span> <br> Levels Cyno once <br> Max level: 90</span>
+    <button class="upgrade-button2" onclick="upgrade2()">Level up!</button>
+</div>
+
 <br>
 <img class="pic" id="clickButton" id="animated" onclick="doThing()" onclick="clickAnimation()" src="assets/CynoNoBack.png">
 <br>
@@ -58,29 +170,48 @@
 
 <img id="moving" class="popupImg" onclick="makeAppear()" src="assets/AlhaithamAsCat.png" width="80" height="80">
 
+<h3 id="statusEffectBar"> Current status effects: </h3>
+
+<img id="statusEffect" class ="tooltiptext" src="assets/AlhaithamAsCat.png" width="100" height="100">
+
+<div class="tooltip">
+  <span class="tooltiptext">2x click bonus</span>
+  <img id="statusEffect" class ="tooltip" src="assets/AlhaithamAsCat.png" width="100" height="100">
+</div>
+
 <script>
     let x = 0
     let i = 1
+    let idleValue = 1
     let cost = 10
     let audioOn = false
     let topOffset = 0
     let sideOffset = 0
-
+    let cost1 = 50
+    let level = 1
 
     let moving = document.querySelector('#moving')
 
 
     makeAppear(100)
 
+
+
     //The function used to update all values displayed in text (for example, x, i and cost)
+
+    function updateValue() {
+        x = x + idleValue
+        // Update the display to show the new resource value
+        document.getElementById("myText").textContent = x;
+    }
+
+    setInterval(updateValue, 1000); // Call the function 
+
     function makeAppear() {
-        topOffset = getRandomInt(0, window.innerHeight)
-        sideOffset = getRandomInt(0 , window.innerWidth )
+        topOffset = getRandomInt(40, window.innerHeight -40)
+        sideOffset = getRandomInt(40 , window.innerWidth -40)
         moving.style.top = `${topOffset}px`
         moving.style.left = `${sideOffset}px`
-
-        //window.innerWidth
-        //window.innerHeight
 
         function getRandomInt(min, max) {
             min = Math.ceil(min);
@@ -93,6 +224,11 @@
         document.querySelector('#myText').textContent = x
         document.querySelector('#myUpgradeText').textContent = i
         document.querySelector("#upgradeCost").textContent = cost
+        document.querySelector('#myIdleText').textContent = idleValue
+        document.querySelector('#cost1').textContent = cost1
+
+
+        console.log("Values updated")
     }
     //When the 'Export' button is pressed, this is activated and takes all values needed and puts them into hexedecimal and in an array
     function createSaveKey() {
@@ -117,6 +253,7 @@
             i = parseInt(saveArray[1], 16)
             cost = parseInt(saveArray[2], 16)
         }
+
         updateValues()
 
 
@@ -144,10 +281,13 @@
         document.querySelector('#myText').textContent = 0
         document.querySelector('#myUpgradeText').textContent = 1
         document.querySelector("#upgradeCost").textContent = 10
+        document.querySelector("#myIdleText").textContent = 1
     }
 
     // Function called when the first upgrade button is pressed
     function upgrade1() {
+        console.log(cost)
+
         if (x >= cost) {
             i ++
             x = x - cost
@@ -164,12 +304,36 @@
 
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms))
-}
-        
+        }
     }
+
+    function upgrade2() {
+        console.log("heyy")
+        if (x >= cost1) { 
+
+            x = x - cost1 
+            if (level % 10 === 0) {
+                cost1 = cost1 * 4
+                idleValue = idleValue + 5
+                console.log("on 10")
+            }
+            else {
+                cost1 = cost1 * 2
+                idleValue = idleValue + 1
+                console.log(idleValue)
+            }
+             
+        }
+
+        updateValues()
+    }
+
     //Funciton activated when Cyno icon is clicked
     function doThing() {
         x = x + i
         document.querySelector('#myText').textContent = x
     }
+
+    //make buttons red when you can't afford them, and green when you can.
+   // 15,a,2ef7 (friends save code)
 </Script> 
