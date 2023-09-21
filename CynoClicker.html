@@ -144,9 +144,6 @@
 
 <body onload="runFunc()"> </body>
 
-
-<!--add colour selector-->
-<!--Async functions!!!!-->
 <br>
 
 <h1>You have <span id="myText"></span> Mora!</h1>
@@ -212,8 +209,6 @@
 
     setInterval(updateValue, 1000); // Call the function 
 
-    // setInterval(makeAppear, 1000)
-
     setInterval(makeAppear, 300000)
 
     function boosterApply() {
@@ -269,14 +264,8 @@
         document.querySelector('#cost1').textContent = cost1
         document.querySelector('#cynoLevel').textContent = cynoLevel
         changeButtonColour()
-
-
-        changeButtonColour()
-
-        
-
-
     }
+
     //When the 'Export' button is pressed, this is activated and takes all values needed and puts them into hexedecimal and in an array
     function createSaveKey() {
         let saveArray = []
