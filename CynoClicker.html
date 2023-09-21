@@ -199,6 +199,7 @@
     let level = 1
     let cynoLevel = 1
     let moving = document.querySelector('#moving')
+    let boosterOn = false
 
 
     function updateValue() {
@@ -221,13 +222,13 @@
 
         tempVar.style.visibility = `visible`
 
-        i = i *2
+        boosterOn = true
         updateValues()
 
         setTimeout(boosterRemove, 30000)
 
         function boosterRemove() {
-            i = i / 2
+            boosterOn = false
             updateValues()
             tempVar.style.visibility = `hidden`
         }
@@ -376,7 +377,13 @@
 
     //Funciton activated when Cyno icon is clicked
     function doThing() {
+        if (boosterOn === false) {
         x = x + i
+        }
+        else {
+            x = x + 2 * i
+            document.querySelector('#myUpgradeText')
+        }
         updateValues()
     }
 
