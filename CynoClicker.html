@@ -167,9 +167,9 @@
 <h1> <span id="upgradeText"></span></h1>
 <br>
 <img class="playAudioClass" onclick="playAudio()" src="assets/audioSymbol.png" width="80" height="60">
-<button id="saveArray1" onclick="createSaveKey()"><span>Export</span></button>
+<button id="saveArray1" onclick="createSaveKey()"><span>Save</span></button>
 <button id="importArray" onclick="importSaveKey()"><span>Import</span></button>
-<input type="text" id="saveKey" placeholder="Type save key here..." name="saveKeyInput">
+<!-- <input type="text" id="saveKey" placeholder="Type save key here..." name="saveKeyInput"> -->
 <br>
 
 <img id="moving" class="popupImg" onclick="boosterApply()" src="assets/AlhaithamAsCat.png" width="80" height="80">
@@ -197,6 +197,10 @@
     let cynoLevel = 1
     let moving = document.querySelector('#moving')
     let boosterOn = false
+ 
+    let stuff = {
+            items: [x, i, cost, idleValue, cost1, cynoLevel],
+        }
 
 
     function updateValue() {
@@ -263,34 +267,48 @@
         document.querySelector('#myIdleText').textContent = idleValue
         document.querySelector('#cost1').textContent = cost1
         document.querySelector('#cynoLevel').textContent = cynoLevel
+
+        // let stuff = {
+        //     items: [x, i, cost, idleValue, cost1, cynoLevel],
+        // }
+        // localStorage.setItem('someKey', JSON.stringify(stuff))
+        
         changeButtonColour()
     }
 
     //When the 'Export' button is pressed, this is activated and takes all values needed and puts them into hexedecimal and in an array
     function createSaveKey() {
-        let saveArray = []
-        saveArray[0] = x.toString(16)
-        saveArray[1] = i.toString(16)
-        saveArray[2] = cost.toString(16)
 
+        let stuff = {
+            items: [x, i, cost, idleValue, cost1, cynoLevel],
+        }
+        stuff.items[0] = x
+        stuff.items[1] = i
+        stuff.items[2] = cost
+        stuff.items[3] = idleValue
+        stuff.items[4] = cost1
+        stuff.items[5] = cynoLevel
 
-        navigator.clipboard.writeText(saveArray)
-        alert("Copied the text: " + saveArray)
+        localStorage.setItem('someKey', JSON.stringify(stuff))
     }
 
     // Takes the array exported from the function 'createSaveKey' and interprets the data back into the game to import the save data
     function importSaveKey() {
-        saveArray = document.getElementById("saveKey").value
-        saveArray = saveArray.split(',')
-
-        if( saveArray[0] > 0 ||  saveArray[1] >= 1 ||  saveArray[2] >= 10) {
-            x = parseInt(saveArray[0], 16)
-            i = parseInt(saveArray[1], 16)
-            cost = parseInt(saveArray[2], 16)
-        }
-
-        updateValues()
-
+        console.log(x)
+        let data = JSON.parse(localStorage.getItem('someKey'))
+        document.querySelector('#myText').textContent = data.items[0]
+        x = data.items[0]
+        document.querySelector('#myUpgradeText').textContent = data.items[1]
+        i = data.items[1]
+        document.querySelector("#upgradeCost").textContent = data.items[2]
+        cost = data.items[2]
+        document.querySelector('#myIdleText').textContent = data.items[3]
+        idleValue = data.items[3]
+        document.querySelector('#cost1').textContent = data.items[4]
+        cost1 = data.items[4]
+        document.querySelector('#cynoLevel').textContent = data.items[5]
+        cynoLevel = data.items[5]
+        console.log("imported")
 
     }
 
